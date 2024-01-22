@@ -1,4 +1,9 @@
 # LearningCourseRecommender 使用範例
+這隻程式的目的是讓 express 後端呼叫，並回傳推薦的課程 id 與評分
+本程式需傳入兩個參數
+user id: 用於識別唯一使用者
+recommendType: 用於決定要使用哪一種推薦方法，可以為 "highestRating"
+
 ## 執行
 ```
 python -u "e:\progremmingFile\Github\Sapientia-Creatrix\RecommendSystem\LearningCourseRecommender.py" 0 highestRating
