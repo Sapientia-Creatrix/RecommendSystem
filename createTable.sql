@@ -25,7 +25,7 @@ IGNORE 1 ROWS;
 
 -- replace & with , in course_description column
 UPDATE originData
-SET course_description = REPLACE(course_description, '&', ',');
+SET course_description = REPLACE(course_description, '^', ',');
 
 
 describe originData;
