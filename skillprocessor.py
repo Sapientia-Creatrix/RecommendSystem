@@ -37,4 +37,5 @@ sorted_skill_counts = sorted(skill_counts.items(), key=lambda x: x[1], reverse=T
 
 # 印出不同技能及其次數 (已排序)
 for skill, count in sorted_skill_counts:
-    print(f"{skill}: {count} times")
+    # print(f"{skill}: {count} times")
+    print(skill)

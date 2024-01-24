@@ -16,8 +16,8 @@ CREATE TABLE if not exists originData (
     sepSkills TEXT
 );
 
---load data from csv file into table originData
-LOAD DATA local INFILE 'E:\\progremmingFile\\Github\\Sapientia-Creatrix\\Coursera_NewSkill.csv'
+-- load data from csv file into table originData
+LOAD DATA local INFILE 'E:\\progremmingFile\\Github\\Sapientia-Creatrix\\RecommendSystem\\Coursera_NewSkill.csv'
 INTO TABLE originData
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
@@ -70,6 +70,69 @@ FROM originData;
 describe Course;
 SELECT COUNT(*) FROM Course;
 select * from Course limit 1;
+
+
+-- 創建存放 user 資料的 table
+create table `user`(
+	`id` int not null auto_increment,
+    `name` varchar(128) not null,
+    `password_hash` varchar(1024) not null,
+    `skills` varchar(2048),
+    `learning_path` varchar(2048),
+    `coin` int default 0,
+	`deleted` boolean not null default false,
+    `skillPrefer` TEXT,
+    primary key(`id`)
+);
+-- alter table `user` add column `password_hash` varchar(1024) not null after `name`;
+-- alter table user add column `deleted` boolean not null default false;
+
+INSERT INTO `user` (`name`, `password_hash`, `skills`, `learning_path`, `coin`, `skillPrefer`) VALUES
+('Jason', SHA2('password1', 512), 'Java,Python', '', 100, '{"Marketing": 0.25, "Data Science": 0.25, "Business": 0.2, "Computer Science": 0.15, "Data Analysis": 0.15, "Information Technology": 0.012, "Business Essentials": 0.012, "Business Strategy": 0.012, "Leadership and Management": 0.012, "Finance": 0.012, "Education": 0.002, "Personal Development": 0.002, "Software Development": 0.002, "Arts and Humanities": 0.002, "Machine Learning": 0.002, "Health": 0.002, "Physical Science and Engineering": 0.002, "Social Sciences": 0.002, "Data Management": 0.002, "Health Informatics": 0.002, "Probability and Statistics": 0.002, "Law": 0.002, "Psychology": 0.002, "Research": 0.002, "Economics": 0.002, "Chemistry": 0.002, "Other Languages": 0.002, "Support and Operations": 0.002, "Research Methods": 0.002, "Networking": 0.002, "Nutrition": 0.002, "Governance and Society": 0.002, "Basic Science": 0.002, "Cloud Computing": 0.002, "Entrepreneurship": 0.002, "History": 0.002, "Design and Product": 0.002, "Environmental Science and Sustainability": 0.002, "Computer Security and Networks": 0.002, "Patient Care": 0.002, "Algorithms": 0.002, "Math and Logic": 0.002, "Security": 0.002, "Philosophy": 0.002, "Physics and Astronomy": 0.002, "Learning English": 0.002}
+');
+
+
+create table `courseHistory`(
+	`id` int not null auto_increment,
+    `user_id` int not null,
+    `course_id` int not null,
+    `progress` float not null,
+    foreign key(`user_id`) references `user`(`id`),
+    foreign key(`course_id`) references `course`(`id`),
+    primary key(`id`)
+);
+
+
+create table `badge`(
+	`id` int not null auto_increment,
+    `name` varchar(512) not null,
+    `description` varchar(2048) not null,
+    primary key(`id`)
+);
+
+
+create table `userBadge`(
+	`id` int not null auto_increment,
+    `user_id` int not null,
+    `badge_id` int not null,
+    `date` datetime default current_timestamp,
+    `display` boolean default true,
+    foreign key(`user_id`) references `user`(`id`),
+    foreign key(`badge_id`) references `badge`(`id`),
+    primary key(`id`, `user_id`, `badge_id`)
+);
+
+
+create table `courseComment`(
+	`id` int not null auto_increment,
+    `user_id` int not null,
+    `course_id` int not null,
+    `rate` float not null,
+    `context` varchar(2048),
+    foreign key(`user_id`) references `user`(`id`),
+    foreign key(`course_id`) references `course`(`id`),
+    primary key(`id`)
+);
 
 
 drop database main;
