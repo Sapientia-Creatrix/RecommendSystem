@@ -1,4 +1,4 @@
-# 這隻程式的目的是讓 express 後端呼叫，並回傳推薦的課程 id 與評分
+# 這隻程式的目的是讓 express 後端呼叫，並回傳推薦的課程資訊
 # 本程式需傳入三個參數
 # user id: 用於識別唯一使用者
 # recommendWay: 用於決定要使用哪一種推薦方法，可以為 "recommend"
@@ -73,8 +73,8 @@ if(sortWay=="rating"):
         
     # 根據 result[5] 排序 final_result
     final_result.sort(key=lambda x: x[5], reverse=True)
-    for result in final_result:
-        print(result[0], result[1], result[5])
+    # for result in final_result:
+    #     print(result[0], result[1], result[5])
 
 # ------------------- 根據 skill_counter 決定 final_result END-------------------
 
