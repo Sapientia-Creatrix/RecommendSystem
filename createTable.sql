@@ -41,11 +41,12 @@ CREATE TABLE if not exists Course (
     rate FLOAT,
     description TEXT,
     skills TEXT,
+    popularity INT,
     deleted BOOLEAN
 );
 
 -- 將 originData 中的資料搬到 Course 中
-INSERT INTO Course (name, university, url, difficulty, rate, description, skills, deleted)
+INSERT INTO Course (name, university, url, difficulty, rate, description, skills, popularity, deleted)
 SELECT
     course_name,
     university,
@@ -61,6 +62,7 @@ SELECT
     course_rating,
     course_description,
     sepSkills,
+    FLOOR(RAND() * 100001) AS popularity,
     CASE
         WHEN sepSkills = '' THEN 1
         ELSE 0
@@ -80,8 +82,8 @@ create table `user`(
     `skills` varchar(2048),
     `learning_path` varchar(2048),
     `coin` int default 0,
-	`deleted` boolean not null default false,
     `skillPrefer` TEXT,
+	`deleted` boolean not null default false,
     primary key(`id`)
 );
 -- alter table `user` add column `password_hash` varchar(1024) not null after `name`;

@@ -5,7 +5,8 @@ import pandas as pd
 import re
 
 # 讀取 CSV 檔案
-df = pd.read_csv('Coursera_NewSkill.csv', delimiter=',')  # 假設使用 tab 作為分隔符號
+df = pd.read_csv('Coursera_NewSkill.csv', delimiter=',', encoding='gbk')
+
 
 # 取得 Skills 欄位的值
 skills_column = df['sepSkills']
@@ -14,6 +15,7 @@ skills_column = df['sepSkills']
 all_skills = []
 for skills in skills_column:
     skills=str(skills)
+    print(skills)
     result_list = skills.split("@")
     all_skills.extend(result_list)
 
