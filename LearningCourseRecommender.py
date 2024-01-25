@@ -55,6 +55,7 @@ if(recommendWay=="recommend"):
 
 # ------------------- 根據 skill_counter 決定 final_result -------------------
 final_result=[] # 用於存放最後的結果
+chooseCourseId = {} # 用於確保不會重複推薦同一個課程 (因為資料庫中有些課程有重複)
 for skill, count in skill_counter.items(): # 依照 skill_counter 去資料庫中找課程
     query = f"SELECT * FROM Course WHERE skills like '%{skill}%' ORDER BY popularity DESC" # 根據 popularity 排序
     cursor.execute(query)
@@ -62,7 +63,10 @@ for skill, count in skill_counter.items(): # 依照 skill_counter 去資料庫�
 
     counter=0
     for result in results:
+        if(result[1] in chooseCourseId):
+            continue
         final_result.append(result)
+        chooseCourseId[result[1]] = 1
 
         counter+=1
         if(counter==count):
