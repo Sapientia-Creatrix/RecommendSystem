@@ -54,24 +54,43 @@ if(recommendWay=="recommend"):
 
 
 # ------------------- 根據 skill_counter 決定 final_result -------------------
+# 取得 user 的 recommendHistory
+query = f"SELECT recommendHistory FROM user WHERE id = {userID}"
+cursor.execute(query)
+result = cursor.fetchone()
+recommendHistory = json.loads(result[0])
+
 final_result=[] # 用於存放最後的結果
 chooseCourseId = {} # 用於確保不會重複推薦同一個課程 (因為資料庫中有些課程有重複)
+
 for skill, count in skill_counter.items(): # 依照 skill_counter 去資料庫中找課程
     query = f"SELECT * FROM Course WHERE skills like '%{skill}%' ORDER BY popularity DESC" # 根據 popularity 排序
     cursor.execute(query)
-    results = cursor.fetchall()
+    results = cursor.fetchall() # 取得所有指定 skillType 的課程
 
     counter=0
-    for result in results:
-        if(result[1] in chooseCourseId):
+    for result in results: 
+        if(result[0] in chooseCourseId): # 如果出現重複的課程，則跳過
             continue
+
+        skipThisCourse = False # 用於確認是否要跳過這個課程
+        for history in recommendHistory:
+            if(history["course_id"]==result[0]): # 如果這個課程已經被推薦過了，則有概率跳過
+                prob = 1 / (2**(history["RecommendFrequency"]))
+                if(random.random() > prob):
+                    skipThisCourse = True
+                    break
+
+        if(skipThisCourse):
+            continue
+
         final_result.append(result)
-        chooseCourseId[result[1]] = 1
+        chooseCourseId[result[0]] = 1
 
         counter+=1
         if(counter==count):
             break
-    
+
 # 根據 result[8] 排序 final_result
 final_result.sort(key=lambda x: x[8], reverse=True)
 # for result in final_result:
@@ -92,7 +111,8 @@ for row in final_result:
         "rate": row[5],
         # "description": row[6],
         "skills": row[7],
-        "deleted": row[8]
+        "popularity": row[8],
+        "deleted": row[9]
     }
     final_result_json.append(course_dict)
 

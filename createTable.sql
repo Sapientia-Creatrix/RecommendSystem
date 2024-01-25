@@ -83,15 +83,15 @@ create table `user`(
     `learning_path` varchar(2048),
     `coin` int default 0,
     `skillPrefer` TEXT,
+    `recommendHistory` TEXT,
 	`deleted` boolean not null default false,
     primary key(`id`)
 );
 -- alter table `user` add column `password_hash` varchar(1024) not null after `name`;
 -- alter table user add column `deleted` boolean not null default false;
 
-INSERT INTO `user` (`name`, `password_hash`, `skills`, `learning_path`, `coin`, `skillPrefer`) VALUES
-('Jason', SHA2('password1', 512), 'Java,Python', '', 100, '{"Marketing": 0.25, "Data Science": 0.25, "Business": 0.2, "Computer Science": 0.15, "Data Analysis": 0.15, "Information Technology": 0.012, "Business Essentials": 0.012, "Business Strategy": 0.012, "Leadership and Management": 0.012, "Finance": 0.012, "Education": 0.002, "Personal Development": 0.002, "Software Development": 0.002, "Arts and Humanities": 0.002, "Machine Learning": 0.002, "Health": 0.002, "Physical Science and Engineering": 0.002, "Social Sciences": 0.002, "Data Management": 0.002, "Health Informatics": 0.002, "Probability and Statistics": 0.002, "Law": 0.002, "Psychology": 0.002, "Research": 0.002, "Economics": 0.002, "Chemistry": 0.002, "Other Languages": 0.002, "Support and Operations": 0.002, "Research Methods": 0.002, "Networking": 0.002, "Nutrition": 0.002, "Governance and Society": 0.002, "Basic Science": 0.002, "Cloud Computing": 0.002, "Entrepreneurship": 0.002, "History": 0.002, "Design and Product": 0.002, "Environmental Science and Sustainability": 0.002, "Computer Security and Networks": 0.002, "Patient Care": 0.002, "Algorithms": 0.002, "Math and Logic": 0.002, "Security": 0.002, "Philosophy": 0.002, "Physics and Astronomy": 0.002, "Learning English": 0.002}
-');
+INSERT INTO `user` (`name`, `password_hash`, `skills`, `learning_path`, `coin`, `skillPrefer`, `recommendHistory`) VALUES
+('Jason', SHA2('password1', 512), 'Java,Python', '', 100, '{"Marketing": 0.25, "Data Science": 0.25, "Business": 0.2, "Computer Science": 0.15, "Data Analysis": 0.15, "Information Technology": 0.012, "Business Essentials": 0.012, "Business Strategy": 0.012, "Leadership and Management": 0.012, "Finance": 0.012, "Education": 0.002, "Personal Development": 0.002, "Software Development": 0.002, "Arts and Humanities": 0.002, "Machine Learning": 0.002, "Health": 0.002, "Physical Science and Engineering": 0.002, "Social Sciences": 0.002, "Data Management": 0.002, "Health Informatics": 0.002, "Probability and Statistics": 0.002, "Law": 0.002, "Psychology": 0.002, "Research": 0.002, "Economics": 0.002, "Chemistry": 0.002, "Other Languages": 0.002, "Support and Operations": 0.002, "Research Methods": 0.002, "Networking": 0.002, "Nutrition": 0.002, "Governance and Society": 0.002, "Basic Science": 0.002, "Cloud Computing": 0.002, "Entrepreneurship": 0.002, "History": 0.002, "Design and Product": 0.002, "Environmental Science and Sustainability": 0.002, "Computer Security and Networks": 0.002, "Patient Care": 0.002, "Algorithms": 0.002, "Math and Logic": 0.002, "Security": 0.002, "Philosophy": 0.002, "Physics and Astronomy": 0.002, "Learning English": 0.002}', '[{"course_id": 762, "RecommendOrder": 1, "RecommendFrequency": 1},{"course_id": 34, "RecommendOrder": 2, "RecommendFrequency": 3},{"course_id": 1192, "RecommendOrder": 3, "RecommendFrequency": 1}]');
 
 
 create table `courseHistory`(
