@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 RECOMMEND_COURSE_NUM = 50 # 每次回傳的推薦課程數量
 
 # 輸入參數不足，直接結束程式
-if len(sys.argv) < 2:
+if len(sys.argv) < 3:
     print("argument less than 2")
     sys.exit(1)
 
