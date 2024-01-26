@@ -51,8 +51,9 @@ query = f"SELECT id, skillPrefer FROM user"
 cursor.execute(query)
 users = cursor.fetchall()
 
-similarity = 0
-similarity_user = 1
+
+similarity_users = []
+similarity_limit = 0.3
 
 # 取得最相似的user
 for user2 in users:
@@ -71,24 +72,25 @@ for user2 in users:
     id2 = json.loads(user2[0])
     if id1 == id2:
         continue
-    if similarity < cos_value:
-        similarity = cos_value
-        similarity_user = id2
+    if similarity_limit < cos_value:
+        similarity_users.append(id)
     
 # get recommend history
 
-query = f"select recommendHistory from user where id = {similarity_user}"
-cursor.execute(query)
-result = cursor.fetchone()
-histories = json.loads(result)
+course_set = set()
+for similarity_user in similarity_users:
+    query = f"select recommendHistory from user where id = {similarity_user}"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    histories = json.loads(result)
 
 
-result = []
-for course in histories:
-    course_dict = {
-        "id": course["course_id"]
-    }
-    result.append(course_dict)
+    for course in histories:
+        course_dict = {
+            "id": course["course_id"]
+        }
+        course_set.add(course_dict)
+        
 
 print(result)
 
