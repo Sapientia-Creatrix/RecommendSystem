@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 
 
 RECOMMEND_COURSE_NUM = 50 # 每次回傳的推薦課程數量
+SIMILARITY_LIMIT = 0.3 # 相似度門檻值，大於此值的使用者才會被視為同背景的使用者
 
 # 輸入參數不足，直接結束程式
 if len(sys.argv) < 2:
@@ -52,49 +53,87 @@ cursor.execute(query)
 users = cursor.fetchall()
 
 
-similarity_users = []
-similarity_limit = 0.3
-
-# 取得最相似的user
-for user2 in users:
-    skillPrefer2 = json.loads(user2[1])
+similarity_users = [] # 用於存放相似度大於 SIMILARITY_LIMIT 的使用者 id
+for user2 in users: # 對於每一個使用者
+    skillPrefer2 = json.loads(user2[1]) # 取得其 skillPrefer 的 JSON 字串
     len1 = 0
     len2 = 0
     dot_value = 0
-    for skill in skillPrefer:
-        dot_value += (user[skill] * user2[skill])
-        len1 += (user[skill]**2)
-        len2 += (user[skill]**2)
+    for skill in skillPrefer: # 計算跟當前使用者相似度的 cosine similarity
+        dot_value += (skillPrefer[skill] * skillPrefer2[skill])
+        len1 += (skillPrefer[skill]**2)
+        len2 += (skillPrefer[skill]**2)
     len1 = len1 **0.5
     len2 = len2 **0.5
     cos_value = dot_value / (len1 * len2)
-    id1 = json.loads(user[0])
-    id2 = json.loads(user2[0])
+    id1 = user[0]
+    id2 = user2[0]
     if id1 == id2:
         continue
-    if similarity_limit < cos_value:
-        similarity_users.append(id)
-    
-# get recommend history
+    if SIMILARITY_LIMIT < cos_value: # 如果相似度大於 SIMILARITY_LIMIT
+        similarity_users.append(id2) # 將該使用者加入 similarity_users
 
-course_set = set()
+# 取得 similarity_users 的 recommendHistory
+recommendCourseSet = [] # 用於存放所有推薦課程的 id (基於相似使用者的歷史紀錄)
 for similarity_user in similarity_users:
     query = f"select recommendHistory from user where id = {similarity_user}"
     cursor.execute(query)
     result = cursor.fetchone()
-    histories = json.loads(result)
-
+    histories = json.loads(result[0]) # 取得該使用者的 recommendHistory (JSON 字串) 
 
     for course in histories:
-        course_dict = {
-            "id": course["course_id"]
-        }
-        course_set.add(course_dict)
+        recommendCourseSet.append(course["course_id"])
         
 
-print(result)
+# 取得 user 的 recommendHistory
+query = f"SELECT recommendHistory FROM user WHERE id = {userID}"
+cursor.execute(query)
+result = cursor.fetchone()
+recommendHistory = json.loads(result[0])
 
+final_result=[] # 用於存放最後的結果
+chooseCourseId = {} # 用於確保不會重複推薦同一個課程 (因為資料庫中有些課程有重複)
+for courseID in recommendCourseSet: # 遍歷recommendCourseSet
+    if(courseID in chooseCourseId): # 如果出現重複的課程，則跳過
+        continue
 
+    skipThisCourse = False # 用於確認是否要跳過這個課程
+    for history in recommendHistory:
+        if(history["course_id"]==courseID): # 如果這個課程已經被推薦過了，則有概率跳過
+            prob = 1 / (2**(history["RecommendFrequency"]))
+            if(random.random() > prob):
+                skipThisCourse = True
+                break
+
+    if(skipThisCourse):
+        continue
+
+    final_result.append(courseID)
+    chooseCourseId[courseID] = 1
+
+    if(len(final_result)==RECOMMEND_COURSE_NUM):
+        break
+
+# 將 final_result 轉成 JSON 格式
+        
+final_result_json = []
+for row in final_result:
+    course_dict = {
+        "id": row,
+        #"name": row[1],
+        #"university": row[2],
+        #"url": row[3],
+        #"difficulty": row[4],
+        #"rate": row[5],
+        # "description": row[6],
+        #"skills": row[7],
+        #"popularity": row[8],
+        #"deleted": row[9]
+    }
+    final_result_json.append(course_dict)
+
+json_result = json.dumps(final_result_json)
+print(json_result)
 
 
 cursor.close()
