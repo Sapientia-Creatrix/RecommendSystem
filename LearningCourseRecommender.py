@@ -1,7 +1,7 @@
 # 這隻程式的目的是讓 express 後端呼叫，並回傳推薦的課程資訊
 # 本程式需傳入兩個參數
 # user id: 用於識別唯一使用者
-# recommendWay: 用於決定要使用哪一種推薦方法，可以為 "recommend"
+# recommendWay: 用於決定要使用哪一種推薦方法，可以為 "recommend", "popularity" 其中之一
 
 from collections import Counter
 import json
@@ -35,20 +35,23 @@ connection = mysql.connector.connect(
 # ------------------- 計算出 skill_counter -------------------
 cursor = connection.cursor()
 skill_counter = Counter() # 為 hashTable 結構，用於計算要推薦的 skillType 的種類及數量
-if(recommendWay=="recommend"):
-    query = f"SELECT skillPrefer FROM user WHERE id = {userID}" # 取得該使用者的 skillPrefer
-    cursor.execute(query)
+query = f"SELECT skillPrefer FROM user WHERE id = {userID}" # 取得該使用者的 skillPrefer
+cursor.execute(query)
 
-    result = cursor.fetchone()
+result = cursor.fetchone()
 
-    if result: # 如果找到該使用者的資料
-        skillPrefer_str = result[0] # 取得 skillPrefer 的 JSON 字串
-        skillPrefer = json.loads(skillPrefer_str) # 將 JSON 字串轉換為 Python 字典
+if result: # 如果找到該使用者的資料
+    skillPrefer_str = result[0] # 取得 skillPrefer 的 JSON 字串
+    skillPrefer = json.loads(skillPrefer_str) # 將 JSON 字串轉換為 Python 字典
+    if(recommendWay=="recommend"):
         for i in range(0, RECOMMEND_COURSE_NUM): # 依照 skillPrefer 的權重隨機選擇 skillType
             chosen_skill = random.choices(list(skillPrefer.keys()), weights=list(skillPrefer.values()))[0]
             skill_counter[chosen_skill] += 1
-    else:
-        print("找不到該使用者的資料")
+    elif(recommendWay=="popularity"):
+        for skill, weight in skillPrefer.items():
+            skill_counter[skill] = 100000000
+else:
+    print("找不到該使用者的資料")
 
 # ------------------- 計算出 skill_counter END-------------------
 
