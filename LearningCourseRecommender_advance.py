@@ -23,11 +23,11 @@ userID=sys.argv[1]
 
 # 建立與資料庫的連接
 connection = mysql.connector.connect(
-    host=os.getenv("HOST"),
-    user=os.getenv("USER"),
-    password=os.getenv("PASSWORD"),
-    database=os.getenv("DATABASE"),
-    port=os.getenv("PORT")
+    host=os.getenv("DATABASE_HOST"),
+    user=os.getenv("DATABASE_USER"),
+    password=os.getenv("DATABASE_PASSWORD"),
+    database=os.getenv("DATABASE_DBNAME"),
+    port=os.getenv("DATABASE_PORT")
 )
 
 # ------------------- 計算出 skill_counter -------------------
