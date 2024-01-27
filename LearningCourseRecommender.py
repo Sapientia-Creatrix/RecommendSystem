@@ -67,7 +67,7 @@ final_result=[] # 用於存放最後的結果
 chooseCourseId = {} # 用於確保不會重複推薦同一個課程 (因為資料庫中有些課程有重複)
 
 for skill, count in skill_counter.items(): # 依照 skill_counter 去資料庫中找課程
-    query = f"SELECT * FROM Course WHERE skills like '%{skill}%' ORDER BY popularity DESC" # 根據 popularity 排序
+    query = f"SELECT * FROM course WHERE skills like '%{skill}%' ORDER BY popularity DESC" # 根據 popularity 排序
     cursor.execute(query)
     results = cursor.fetchall() # 取得所有指定 skillType 的課程
 

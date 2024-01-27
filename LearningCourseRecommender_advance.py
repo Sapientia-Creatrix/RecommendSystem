@@ -56,7 +56,7 @@ else:
 
 # ------------------- 根據 skill_counter 決定 final_result -------------------
 # 取得 user 的 recommendHistory
-query = f"SELECT * FROM Course"
+query = f"SELECT * FROM course"
 cursor.execute(query)
 results = cursor.fetchall()
 

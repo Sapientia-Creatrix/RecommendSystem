@@ -117,7 +117,7 @@ for courseID in recommendCourseSet: # 遍歷recommendCourseSet
         
 final_result_json = []
 for row in final_result:
-    query = f"SELECT * FROM Course WHERE id = {row}"
+    query = f"SELECT * FROM course WHERE id = {row}"
     cursor.execute(query)
     result = cursor.fetchone()
     
