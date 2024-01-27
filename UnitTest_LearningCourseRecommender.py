@@ -26,3 +26,13 @@ try:
     print(output)
 except Exception as e:
     print(e)
+
+# 測試TestLearningCourseRecommender_advance.py
+try:
+    file_path = 'LearningCourseRecommender_advance.py'
+    user_id = '1'
+    result = subprocess.run(['python', file_path, user_id], stdout=subprocess.PIPE, text=True)
+    output = result.stdout
+    print(output)
+except Exception as e:
+    print(e)

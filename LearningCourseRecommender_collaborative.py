@@ -11,7 +11,7 @@ import os
 from dotenv import load_dotenv
 
 
-RECOMMEND_COURSE_NUM = 50 # 每次回傳的推薦課程數量
+RECOMMEND_COURSE_NUM = 100 # 每次回傳的推薦課程數量
 SIMILARITY_LIMIT = 0.3 # 相似度門檻值，大於此值的使用者才會被視為同背景的使用者
 
 # 輸入參數不足，直接結束程式
@@ -117,17 +117,21 @@ for courseID in recommendCourseSet: # 遍歷recommendCourseSet
         
 final_result_json = []
 for row in final_result:
+    query = f"SELECT * FROM Course WHERE id = {row}"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    
     course_dict = {
-        "id": row,
-        #"name": row[1],
-        #"university": row[2],
-        #"url": row[3],
-        #"difficulty": row[4],
-        #"rate": row[5],
-        # "description": row[6],
-        #"skills": row[7],
-        #"popularity": row[8],
-        #"deleted": row[9]
+        "id": result[0],
+        "name": result[1],
+        #"university": result[2],
+        #"url": result[3],
+        "difficulty": result[4],
+        "rate": result[5],
+        #"description": result[6],
+        "skills": result[7],
+        "popularity": result[8],
+        #"deleted": result[9]
     }
     final_result_json.append(course_dict)
 

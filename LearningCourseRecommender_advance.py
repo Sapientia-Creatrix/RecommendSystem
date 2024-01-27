@@ -10,7 +10,7 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 
-RECOMMEND_COURSE_NUM = 50 # 每次回傳的推薦課程數量
+RECOMMEND_COURSE_NUM = 100 # 每次回傳的推薦課程數量
 
 # 輸入參數不足，直接結束程式
 if len(sys.argv) < 2:
@@ -113,14 +113,14 @@ final_result_json = []
 for row in final_result:
     course_dict = {
         "id": row[0],
-        #"name": row[1],
+        "name": row[1],
         #"university": row[2],
         #"url": row[3],
-        #"difficulty": row[4],
-        #"rate": row[5],
+        "difficulty": row[4],
+        "rate": row[5],
         #"description": row[6],
-        #"skills": row[7],
-        #"popularity": row[8],
+        "skills": row[7],
+        "popularity": row[8],
         #"deleted": row[9]
     }
     final_result_json.append(course_dict)
