@@ -38,7 +38,7 @@ cursor.execute(query)
 userSkillPreferStr = cursor.fetchone()
 
 # 取得 course 的 skillsType
-query = f"SELECT skills FROM Course WHERE id = {courseID}" # 取得該課程的 skills
+query = f"SELECT skills FROM course WHERE id = {courseID}" # 取得該課程的 skills
 cursor.execute(query)
 courseSkillsStr = cursor.fetchone()
 
