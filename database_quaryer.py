@@ -29,4 +29,5 @@ result = cursor.fetchall()
 
 # 將結果打包成 json 字串
 result_json = json.dumps(result, ensure_ascii=False)
-print(result_json)
+for i in result_json:
+    print(i, end='')
