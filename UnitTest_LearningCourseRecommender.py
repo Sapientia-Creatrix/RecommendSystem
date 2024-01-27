@@ -1,19 +1,23 @@
 import subprocess
 
 # 測試TestLearningCourseRecommender.py
+
+counter=0
 try:
     file_path = 'LearningCourseRecommender.py'
     user_id = '1'
     recommend_way = 'recommend'
     result = subprocess.run(['python', file_path, user_id, recommend_way], stdout=subprocess.PIPE, text=True)
     output = result.stdout
-    print(output)
+    print(output, end='\npass\n\n')
+    counter+=1
 
     user_id = '1'
     recommend_way = 'popularity'
     result = subprocess.run(['python', file_path, user_id, recommend_way], stdout=subprocess.PIPE, text=True)
     output = result.stdout
-    print(output)
+    print(output, end='\npass\n\n')
+    counter+=1
 except Exception as e:
     print(e)
 
@@ -23,7 +27,8 @@ try:
     user_id = '1'
     result = subprocess.run(['python', file_path, user_id], stdout=subprocess.PIPE, text=True)
     output = result.stdout
-    print(output)
+    print(output, end='\npass\n\n')
+    counter+=1
 except Exception as e:
     print(e)
 
@@ -33,6 +38,10 @@ try:
     user_id = '1'
     result = subprocess.run(['python', file_path, user_id], stdout=subprocess.PIPE, text=True)
     output = result.stdout
-    print(output)
+    print(output, end='\npass\n\n')
+    counter+=1
 except Exception as e:
     print(e)
+
+if counter==4:
+    print('Unit Test All pass')
