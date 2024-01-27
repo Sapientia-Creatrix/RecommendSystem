@@ -1,7 +1,6 @@
 # 這隻程式的目的是讓 express 後端呼叫，並回傳推薦的課程資訊
 # 本程式需傳入兩個參數
 # user id: 用於識別唯一使用者
-# recommendWay: 用於決定要使用哪一種推薦方法，可以為 "recommend", "popularity" 其中之一
 
 from collections import Counter
 import json
@@ -16,8 +15,8 @@ RECOMMEND_COURSE_NUM = 50 # 每次回傳的推薦課程數量
 SIMILARITY_LIMIT = 0.3 # 相似度門檻值，大於此值的使用者才會被視為同背景的使用者
 
 # 輸入參數不足，直接結束程式
-if len(sys.argv) < 3:
-    print("argument less than 2")
+if len(sys.argv) < 2:
+    print("argument less than 1")
     sys.exit(1)
 
 
