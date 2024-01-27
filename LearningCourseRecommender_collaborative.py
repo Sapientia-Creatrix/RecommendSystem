@@ -16,7 +16,7 @@ RECOMMEND_COURSE_NUM = 50 # 每次回傳的推薦課程數量
 SIMILARITY_LIMIT = 0.3 # 相似度門檻值，大於此值的使用者才會被視為同背景的使用者
 
 # 輸入參數不足，直接結束程式
-if len(sys.argv) < 2:
+if len(sys.argv) < 3:
     print("argument less than 2")
     sys.exit(1)
 
